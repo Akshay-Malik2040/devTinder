@@ -1,38 +1,52 @@
 const express=require('express');
 const app=express();
 
-app.get("/user",(req,res)=>{
-    res.send({firstName:"Akshay",secondName:"Malik"});
-})
-
-app.post("/user",(req,res)=>{
-    console.log("save data to db");
-    res.send("data successfully saved");
-})
-
-app.put("/user",(req,res)=>{
-    res.send("data updated successfully using put");
-})
-
-app.patch("/user",(req,res)=>{
-    res.send("data successfully updated using patch");
-})
-
-app.delete("/user",(req,res)=>{
-    res.send("data is deleted successfully");
-})
-
-// app.use("/server",(req,res)=>{
-//     res.send("Hello from server")
+// app.get("/ab*cd",(req,res)=>{
+//     const id=req.params;
+//     console.log(id);
+//     res.send({firstName:"Akshay",secondName:"Malik"});
 // })
 
-// app.use("/hello",(req,res)=>{
-//     res.send("Hello hello hello")
-// })
+app.use("/user",(req,res,next)=>{
+    // res.send("user");
+    console.log("response")
+    // res.send("user");
+    next();
+    // res.send("user");
+},[(req,res,next)=>{
+    // res.send("user");
+    console.log("response 2")
+    // res.send("user");
+    next();
+    // res.send("user");
+},
 
-// app.use('/test',(req,res)=>{
-//     res.send("just testing routes")
-// })
+(req,res,next)=>{
+    // res.send("user");
+    console.log("response 3")
+    // res.send("user");
+    next();
+    // res.send("user");
+}],
+
+(req,res,next)=>{
+    // res.send("user");
+    console.log("response 4")
+    // res.send("user");
+    next();
+    // res.send("user");
+},
+
+(req,res,next)=>{
+    // res.send("user");
+    console.log("response 5")
+    // res.send("user");
+    next();
+    res.send("user");
+}
+
+)
+
 
 app.listen(3000,()=>{
     console.log("Server is successfully listening on port 3000...")
