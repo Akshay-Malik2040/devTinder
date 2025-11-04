@@ -1,52 +1,24 @@
 const express=require('express');
+const {adminAuth,userAuth}=require('./middlewares/auth.js');
 const app=express();
 
-// app.get("/ab*cd",(req,res)=>{
-//     const id=req.params;
-//     console.log(id);
-//     res.send({firstName:"Akshay",secondName:"Malik"});
-// })
+app.use("/admin",adminAuth)
 
-app.use("/user",(req,res,next)=>{
-    // res.send("user");
-    console.log("response")
-    // res.send("user");
-    next();
-    // res.send("user");
-},[(req,res,next)=>{
-    // res.send("user");
-    console.log("response 2")
-    // res.send("user");
-    next();
-    // res.send("user");
-},
+app.get("/user/login",(req,res)=>{
+    res.send("user login process started");
+})
+app.get("/user/getAllData",userAuth,(req,res,next)=>{
+    res.send("User data send");
+})
 
-(req,res,next)=>{
-    // res.send("user");
-    console.log("response 3")
-    // res.send("user");
-    next();
-    // res.send("user");
-}],
 
-(req,res,next)=>{
-    // res.send("user");
-    console.log("response 4")
-    // res.send("user");
-    next();
-    // res.send("user");
-},
+app.get("/admin/getAllData",(req,res,next)=>{
+    res.send("All data Send");
+})
 
-(req,res,next)=>{
-    // res.send("user");
-    console.log("response 5")
-    // res.send("user");
-    next();
-    res.send("user");
-}
-
-)
-
+app.get("/admin/deleteUser",(req,res)=>{
+    res.send("deleted the user");
+})
 
 app.listen(3000,()=>{
     console.log("Server is successfully listening on port 3000...")
