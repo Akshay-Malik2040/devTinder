@@ -3,13 +3,54 @@ const {connectDB}=require("./config/database")
 const app=express();
 const User=require("./models/user")
 
+app.use(express.json());
+
+app.get("/user",async(req,res)=>{
+    const userEmail=req.body.emailId;
+    try{
+        const users=await User.find({emailId:userEmail}).exec();
+        if(users.length===0){
+            res.status(404).send("User Not Found");
+        }
+        res.send(users);
+    } catch(err){
+        res.status(404).send("Something Went Wrong!!"+err);
+    }
+})
+
+app.get("/feed",async(req,res)=>{
+    try{
+        const users=await User.find();
+        res.send(users);
+    } catch (err){
+        res.send(err);
+    }
+})
+
+app.delete("/user",async(req,res)=>{
+        const userId=req.body.userId
+        try{
+            const user=await User.findByIdAndDelete(userId);
+            res.send("User deleted Successfully");
+        } catch(err){
+            res.send(err)
+        }
+})
+
+app.patch("/user",async (req,res)=>{
+    const userId=req.body.userId;
+
+    try{
+        const data=req.body;
+        const user=await User.findByIdAndUpdate(userId,data,{runValidators:true});
+        res.send("User updated successfully")
+    }catch(err){
+        res.send(err)
+    }
+})
+
 app.post("/signup",async(req,res)=>{
-    const user=new User({
-        firstName:"Abhishek",
-        lastName: "Yadav",
-        emailId:"abhi@gmail.com",
-        password:"abhi@123",
-    })
+    const user=new User(req.body)
 
     await user.save();
     res.send("user created")
