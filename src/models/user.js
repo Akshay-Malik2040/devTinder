@@ -23,6 +23,15 @@ const userSchema=mongoose.Schema({
         }
         
     },
+    password:{
+        type:String,
+        required:true,
+        validate(value){
+            if(!validator.isStrongPassword(value)){
+                throw new Error("Choose a strong password")
+            }
+        }
+    },
     phone:{
         type:Number,
     },

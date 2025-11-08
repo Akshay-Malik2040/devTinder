@@ -2,8 +2,33 @@ const express=require('express');
 const {connectDB}=require("./config/database")
 const app=express();
 const User=require("./models/user")
+const {validateSignUpData} = require("../src/utils/validation")
+const bcrypt=require("bcrypt")
 
 app.use(express.json());
+
+app.post("/signup",async(req,res)=>{
+    //validation
+    try{
+        validateSignUpData(req);
+        const {firstName,lastName,emailId,password}=req.body;
+        const passwordHash=await bcrypt.hash(password,10);
+
+        const user=new User({
+            firstName,lastName,emailId,
+            password:passwordHash
+        })
+
+        await user.save();
+        res.send("user created")
+    } catch(err){
+        res.send("Error : "+err);
+    }
+})
+
+
+
+
 
 app.get("/user",async(req,res)=>{
     const userEmail=req.body.emailId;
@@ -56,12 +81,6 @@ app.patch("/user",async (req,res)=>{
     }
 })
 
-app.post("/signup",async(req,res)=>{
-    const user=new User(req.body)
-
-    await user.save();
-    res.send("user created")
-})
 
 connectDB().then(()=>{
     console.log("DB is connected successfullly")
