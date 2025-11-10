@@ -4,8 +4,12 @@ const app=express();
 const User=require("./models/user")
 const {validateSignUpData} = require("../src/utils/validation")
 const bcrypt=require("bcrypt")
+const cookieParser=require("cookie-parser")
+const jwt=require("jsonwebtoken");
+const {userAuth}=require("./middlewares/auth")
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/signup",async(req,res)=>{
     //validation
@@ -38,6 +42,10 @@ app.post("/login",async (req,res)=>{
         if(!isPasswordValid){
             throw new Error("Invalid Credentials");
         }
+
+        const token=await jwt.sign({_id:user._id},"Dev@Tinder$790");
+
+        res.cookie("token",token);
         res.send("Login Successfully");
 
     }catch(err){
@@ -46,6 +54,20 @@ app.post("/login",async (req,res)=>{
 
 })
 
+
+app.get("/profile",userAuth,async (req,res)=>{
+    try{
+        const cookies=req.cookies;
+        const {token}=cookies;
+        const decodedMessage=await jwt.verify(token,"Dev@Tinder$790")
+        const {_id}=decodedMessage;
+        const loggedInUser=await User.find({_id});
+        res.send(loggedInUser)
+    } catch(err){
+        res.status(400).send({error : err.message});
+    }
+
+})
 
 
 
