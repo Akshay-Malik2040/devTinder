@@ -38,10 +38,12 @@ authRouter.post("/login",async (req,res)=>{
         const token=await user.getJWT();
 
         res.cookie("token",token);
-        res.send("Login Successfully");
+        res.json({message:"Login Successfully",
+            user:user
+        });
 
     }catch(err){
-        res.send({error :err.message});
+        res.status(401).json({error :err.message});
     }
 
 })
