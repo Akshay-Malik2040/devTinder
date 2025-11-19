@@ -24,13 +24,13 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res)
             if(existingConnectionRequest){
                 throw new Error ("connection request already exist!!");
             }
-            console.log(toUserId)
+           
             
             const toUser=await User.findById(toUserId).exec();
             if(!toUser){
                 throw new Error("User not found")
             }
-            console.log("start")
+            
 
             if(toUserId.toString()===fromUserId.toString()){
                 throw new Error("Cannot send req to Yourself")
@@ -61,7 +61,6 @@ requestRouter.post("/request/review/:status/:requestId",userAuth,async (req,res)
             status:"interested"
         })
         
-        // console.log("debugging");
 
         if(!connectionRequest){
             res.status(404).json({message:"Connection request not found"});

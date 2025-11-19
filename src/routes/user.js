@@ -33,11 +33,11 @@ userRouter.get("/user/connections",userAuth,async(req,res)=>{
                 fromUserId:loggedInUser._id,status:"accepted"
             }
             ]
-        }).populate("fromUserId",USER_SAFE_DATA)
+        }).populate("fromUserId",USER_SAFE_DATA).populate("toUserId",USER_SAFE_DATA);
 
         const data=connectionRequest.map((row)=>{
             if(row.fromUserId._id.toString()==loggedInUser._id.toString()){ return row.toUserId}
-            return row.fromUserId;
+            else return row.fromUserId;
         })
         res.json({data});
     }catch(err){

@@ -2,6 +2,7 @@ const express=require('express');
 const profileRouter=express.Router();
 const {userAuth}=require("../middlewares/auth")
 const {validateEditProfileData}=require("../utils/validation")
+const cors=require('cors')
 
 profileRouter.get("/profile",userAuth,async (req,res)=>{
     try{
@@ -21,7 +22,7 @@ profileRouter.patch('/profile/edit',userAuth,async (req,res)=>{
         const loggedInUser=req.user;
         Object.keys(req.body).every((key)=>loggedInUser[key]=req.body[key]);
         await loggedInUser.save();
-        res.send("Updated Successful");
+        res.json({message:"Updated Successful",loggedInUser});
     } catch(err){
         res.status(400).send({error : err.message});
     }
