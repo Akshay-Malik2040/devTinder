@@ -70,7 +70,6 @@ userRouter.get("/feed",userAuth,async(req,res)=>{
                 {_id:{$ne:loggedInUser._id}}
             ]
         }).select(USER_SAFE_DATA).skip(skip).limit(limit);
-
         res.json({users});
     } catch(err){
         res.status(400).json({Error : err.message})

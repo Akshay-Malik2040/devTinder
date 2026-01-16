@@ -58,9 +58,10 @@ const userSchema=mongoose.Schema({
     }
 },{timestamps:true})
 
+//never user arrow function here as arrow fn does not provide functionality of using this.
 userSchema.methods.getJWT=async function(){
     const user=this;
-    const token = await jwt.sign({_id:user._id},"Dev@Tinder$790")
+    const token = await jwt.sign({_id:user._id},process.env.JWT_SECRET)
     return token
 }
 

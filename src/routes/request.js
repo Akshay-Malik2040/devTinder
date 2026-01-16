@@ -68,7 +68,7 @@ requestRouter.post("/request/review/:status/:requestId",userAuth,async (req,res)
 
         connectionRequest.status=status;
         const data=await connectionRequest.save();
-        res.json({message:"Connection Request accepted"});
+        res.json({message:"Connection Request accepted",data});
     } catch(err){
         res.status(400).json({message: err.message});
     }
