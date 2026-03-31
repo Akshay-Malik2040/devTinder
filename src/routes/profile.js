@@ -1,31 +1,9 @@
-const express=require('express');
-const profileRouter=express.Router();
-const {userAuth}=require("../middlewares/auth")
-const {validateEditProfileData}=require("../utils/validation")
-const cors=require('cors')
+const express = require('express');
+const profileRouter = express.Router();
+const { userAuth } = require("../middlewares/auth");
+const { viewProfile, editProfile } = require("../controllers/profileController");
 
-profileRouter.get("/profile",userAuth,async (req,res)=>{
-    try{
-        const loggedInUser=req.user;
-        res.json({loggedInUser});
-    } catch(err){
-        res.status(400).send("Error: "+err);
-    }
-})
+profileRouter.get("/profile", userAuth, viewProfile);
+profileRouter.patch('/profile/edit', userAuth, editProfile);
 
-profileRouter.patch('/profile/edit',userAuth,async (req,res)=>{
-    try{
-        if(!validateEditProfileData(req)){
-            throw new Error ("Invalid Edit Request");
-        }
-
-        const loggedInUser=req.user;
-        Object.keys(req.body).every((key)=>loggedInUser[key]=req.body[key]);
-        await loggedInUser.save();
-        res.json({message:"Updated Successful",loggedInUser});
-    } catch(err){
-        res.status(400).send({error : err.message});
-    }
-})
-
-module.exports=profileRouter;
+module.exports = profileRouter;

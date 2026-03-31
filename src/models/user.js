@@ -13,6 +13,10 @@ const userSchema=mongoose.Schema({
     lastName:{
         type:String
     },
+    photoUrl:{
+        type:String,
+        default:"https://geographyandyou.com/images/user-profile.png"
+    },
     emailId:{
         type:String,
         required:true,
